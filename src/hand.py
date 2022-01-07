@@ -17,6 +17,7 @@ class Hand():
     def _check_aces(self) -> bool:
         ''' Loops through each card checking for aces equal to 11.
         Changes aces to 1 until hand is valid.
+        Assumes that aces values are changed automatically, instead of asking user
         '''
         for card in self.cards:
             if card[0] == 'A' and self.cards[card] == 11: # check card is an Ace and value is 11
