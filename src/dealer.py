@@ -21,13 +21,11 @@ class Dealer:
             
             answer = input("Hit or Stand? (h/s) :") 
             if answer == "h":
-
                 new_card = self.deck.draw_card()
                 if not self.hand.hit(new_card):
                     self.hand.print_hand()
                     print("----     Bust     ----")
-                    stand = True
-                    continue
+                    break
             elif answer == "s":
                 stand = True
         
