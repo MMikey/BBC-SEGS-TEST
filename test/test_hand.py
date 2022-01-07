@@ -8,36 +8,33 @@ class HandTestCase(unittest.TestCase):
     def setUp(self):  # this method will be run before each test
         self.hand = Hand()
         self.deck = Deck()
-        initial_cards = ( self.deck.get_card('5D'), self.deck.get_card('5S'))
-        self.hand.cards.update(initial_cards)
-
-        self.hand.calculate_score()
         
     def tearDown(self):  # this method will be run after each tests
         self.hand.cards = {}
     
     def test_hit(self):
-        first_score = self.hand.calculate_score()
-        self.hand.hit(self.deck.get_card('2C'))
-        second_score = self.hand.calculate_score()
+        with patch.dict(self.hand.cards, {"5D" : 5, "5S" : 5}):
+            first_score = self.hand.calculate_score()
+            self.hand.hit(self.deck.get_card('2C'))
+            second_score = self.hand.calculate_score()
 
-        with self.subTest():
-            self.assertGreater(second_score, first_score)
-        with self.subTest():
-            self.assertEqual(len(self.hand.cards), 3)
+            with self.subTest():
+                self.assertGreater(second_score, first_score)
+            with self.subTest():
+                self.assertEqual(len(self.hand.cards), 3)
 
     def test_valid(self):
-        self.hand.hit(self.deck.get_card('5C'))
-        valid = self.hand.is_valid()
+        with patch.dict(self.hand.cards, {"5D" : 5, "5S" : 5}):
+            self.hand.hit(self.deck.get_card('5C'))
+            valid = self.hand.is_valid()
 
-        self.assertTrue(valid)
+            self.assertTrue(valid)
 
     def test_not_valid(self):
-        self.hand.hit(self.deck.get_card('KS'))
-        self.hand.hit(self.deck.get_card('KD'))
-        valid = self.hand.is_valid()
-
-        self.assertFalse(valid)
+        with patch.dict(self.hand.cards, {"KD" : 10, "QS" : 10}):
+            self.hand.hit(self.deck.get_card('2C'))
+            valid = self.hand.is_valid()
+            self.assertFalse(valid)
     
     def test_king_ace(self):
         self.hand.cards = {}
